@@ -12,9 +12,8 @@ const Login = () => {
   const handleLogin = async () => {
     try {
      
-      let BaseUrl=`http://localhost:5030`
-      // this is latest Deploye Link which is below
-      // let BaseUrl=`https://filedrive-management.onrender.com`
+      let BaseUrl=`https://propftxbackend.onrender.com`
+     
       const response = await fetch(`${BaseUrl}/user/login`, {
         method: 'POST',
         headers: {
@@ -29,7 +28,7 @@ const Login = () => {
      
 
       if (result.token) {
-        // Save the token to localStorage or sessionStorage
+      
         localStorage.setItem('token', result.token);
         localStorage.setItem('userID', result.user._id);
         localStorage.setItem('user', result.user.name);
@@ -42,9 +41,9 @@ const Login = () => {
           icon: 'success',
           
         });
-        // Swal.fire(result.msg)
+       
         navigate("/Files");
-        // displayUserInfo(result.name);
+       
       } else {
         Swal.fire({
           title: result.msg,

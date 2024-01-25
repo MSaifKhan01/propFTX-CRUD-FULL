@@ -14,7 +14,7 @@ const MovieManagement = () => {
     const formData = new FormData(event.target);
     formData.append("userID", userID);
 
-    let BaseUrl = `http://localhost:5030`; 
+    let BaseUrl = `https://propftxbackend.onrender.com`; 
 
     try {
       const response = await fetch(`${BaseUrl}/movie/add-movie`, {
@@ -26,9 +26,9 @@ const MovieManagement = () => {
       });
 
       if (response.ok) {
-        // const responseText = await response.text();
+        
         const { Msz } = await response.json()
-        // console.log("fgubuj",responseText.Msz)
+       
 
         if (Msz === "A New Movie has been added") {
           Swal.fire({
@@ -55,7 +55,7 @@ const MovieManagement = () => {
 
   const DeleteMovie = async (id) => {
     try {
-      let BaseUrl = `http://localhost:5030`; // Update with your backend URL
+      let BaseUrl = `https://propftxbackend.onrender.com`; 
       const response = await fetch(`${BaseUrl}/movie/delete-movie/${id}`, {
         method: "DELETE",
       });
@@ -81,7 +81,7 @@ const MovieManagement = () => {
 
   const GetingMovieList = async () => {
     try {
-      let BaseUrl = `http://localhost:5030`; 
+      let BaseUrl = `https://propftxbackend.onrender.com`; 
       const response = await fetch(`${BaseUrl}/movie`, {
         method: "GET",
         headers: {
@@ -169,9 +169,7 @@ const MovieManagement = () => {
                 <button className="deleteBtn" onClick={() => DeleteMovie(movie._id)}>
                   Delete
                 </button>
-                {/* <button className="updateBtn" onClick={() => handleUpdate(movie._id)}>
-                  Update
-                </button> */}
+                
 
                 <button className="updateBtn">
               <Link to={"/update/" + movie._id}>Update Movie</Link>

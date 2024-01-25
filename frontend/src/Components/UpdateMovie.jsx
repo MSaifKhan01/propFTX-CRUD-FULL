@@ -14,7 +14,7 @@ const UpadteMovie = () => {
   useEffect(() => {
     const getmovieDetails = async () => {
       try {
-        let BaseUrl = `http://localhost:5030`
+        let BaseUrl = `https://propftxbackend.onrender.com`
         let result = await fetch(`${BaseUrl}/movie/${params.id}`,{
             method:"GET",
             headers: {
@@ -36,7 +36,7 @@ const UpadteMovie = () => {
 
   const updatemovie = async () => {
     try {
-      let BaseUrl = `http://localhost:5030`
+      let BaseUrl = `https://propftxbackend.onrender.com`
       let result = await fetch(`${BaseUrl}/movie/update-movie/${params.id}`, {
         method: "PUT",
         headers: {

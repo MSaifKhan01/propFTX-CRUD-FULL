@@ -15,10 +15,9 @@ const Register = () => {
   const handleRegister = async () => {
     try {
    
-      let BaseUrl=`http://localhost:5030`
+      let BaseUrl=`https://propftxbackend.onrender.com`
 
-      // this is latest Deploye Link which is below
-      // let BaseUrl=`https://filedrive-management.onrender.com`
+      
       const response = await fetch(`${BaseUrl}/user/register`, {
         method: 'POST',
         headers: {
@@ -33,7 +32,7 @@ const Register = () => {
         icon: 'success',
       });
       navigate("/Login");
-      // alert(result.msg);
+     
     } catch (error) {
       Swal.fire({
         title: 'Something went wrong',
