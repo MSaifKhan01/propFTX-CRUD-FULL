@@ -5,6 +5,9 @@
 ## Overview
 This project is a full-stack CRUD (Create, Read, Update, Delete) application for managing movies. It includes both frontend and backend components, allowing users to register, log in, add movies, view movie details, update movies, and delete movies.
 
+### Authentication and Access Control
+In this project, I have implemented authentication and also established a relationship between the user and their movie collection. Users can access their own movie collections exclusively. Conditional rendering is implemented in the frontend to restrict access to the movie collection page until the user has logged in.
+
 ### Frontend
 - **Live Demo:** [propFTX Frontend](https://prop02-ftx.netlify.app/)
 
