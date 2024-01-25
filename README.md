@@ -92,4 +92,4 @@ To run this project locally, follow these steps:
 ## Acknowledgments
 - Frontend hosted on [Netlify](https://www.netlify.com/)
 - Backend hosted on [Render](https://render.com/)
-- Built with love by [Your Name or Team Name]
+
