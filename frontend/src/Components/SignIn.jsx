@@ -42,7 +42,7 @@ const Login = () => {
           
         });
        
-        navigate("/Files");
+        navigate("/Movie");
        
       } else {
         Swal.fire({
