@@ -15,10 +15,9 @@ const bucketName = process.env.S3bucketName;
 const upload = multer({ dest: "uploads/" });
 
 movieRouter.get('/',auth,  async (req,res)=>{
-  // 
-  console.log("UserID here  : ",req.body.userID)
-    // const token=req.headers.authorization
-    // const decoded=jwt.verify(token,"jammi")
+
+  // console.log("UserID here  : ",req.body.userID)
+  
     try{
         
             const movies=await movieModel.find({"userID":req.body.userID}).populate("userID")
@@ -45,11 +44,11 @@ const {id}=req.params
 
 
 movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
-  console.log("UserID here  : ",req.body.userID)
+  // console.log("UserID here  : ",req.body.userID)
 
-  console.log("from movie",req.headers)
+ 
     try {
-      console.log("0")
+     
       const {title,actors,rating} =req.body;
       const {file}=req;
 
@@ -61,7 +60,7 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
       
 
       let moviePresent=await movieModel.findOne({title})
-      console.log("kjbjnj")
+    
         if(moviePresent){
             res.status(409).send({"msg": "movie Already Exists"});
 
@@ -76,19 +75,19 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
         Key:`${file.originalname}`,
         Body:fileContent,
       };
-  console.log("1")
+
       s3.upload(params,async(err,data)=>{
         if(err){
           
           return res.status(500).send("Internal Server Error");
         }
-        console.log("2")
+      
   
         
         const imageUrlS3=data.Location;
   
         try {
-          // Assuming you're extracting the user ID correctly from req.body.user
+         
           const userId = req.body.userID;
           console.log("from post userID : ",userId)
   
@@ -106,6 +105,7 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
   
           await dataForDB.save();
           res.status(200).send({ "Msz": "A New Movie has been added" });
+          
         } catch (err) {
           res.status(400).send({ "Msz": err.message });
         }
