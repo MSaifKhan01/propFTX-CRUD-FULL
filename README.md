@@ -47,6 +47,7 @@ To run this project locally, follow these steps:
    S3bucketName=<your-s3-bucket-name>
    S3AccessKeyId=<your-key id>
    S3SecretAccesKey=<your-access key>
+   MongoUrl=<your MongoDB URL>
    ```
 
 4. **Start the Backend Server:**
@@ -71,6 +72,8 @@ To run this project locally, follow these steps:
 - **S3bucketName:** Name of the AWS S3 bucket used for storing movie images. Please replace `<your-s3-bucket-name>` with your actual S3 bucket name.
 - **S3AccessKeyId:** AWS Access Key ID for accessing the S3 bucket. Please replace `<your-key-id>` with your actual Access Key ID.
 - **S3SecretAccesKey:** AWS Secret Access Key for accessing the S3 bucket. Please replace `<your-access-key>` with your actual Secret Access Key.
+
+- **MongoUrl:** MongoDB connection URL. Please replace `<your-mongodb-url>` with your actual MongoDB connection URL.
 
 ## Routes
 - **User Routes:**
