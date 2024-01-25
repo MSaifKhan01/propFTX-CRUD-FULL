@@ -46,7 +46,7 @@ To run this project locally, follow these steps:
    JWT_Secret=<your-jwt-secret>
    S3bucketName=<your-s3-bucket-name>
    S3AccessKeyId=<your-key id>
-S  3SecretAccesKey=<your-access key>
+   S3SecretAccesKey=<your-access key>
    ```
 
 4. **Start the Backend Server:**
