@@ -64,10 +64,13 @@ To run this project locally, follow these steps:
 6. **Access the Application:**
    Open your web browser and go to `http://localhost:3000` to access the frontend.
 
-## Environment Variables
-- **PORT:** The port on which the backend server will run.
-- **JWT_Secret:** Secret key used for JWT token generation and verification.
-- **S3bucketName:** Name of the AWS S3 bucket used for storing movie images.
+### Environment Variables
+
+- **PORT:** The port on which the backend server will run. Set this to `5030`.
+- **JWT_Secret:** Secret key used for JWT token generation and verification. Please replace `<your-jwt-secret>` with your actual JWT secret.
+- **S3bucketName:** Name of the AWS S3 bucket used for storing movie images. Please replace `<your-s3-bucket-name>` with your actual S3 bucket name.
+- **S3AccessKeyId:** AWS Access Key ID for accessing the S3 bucket. Please replace `<your-key-id>` with your actual Access Key ID.
+- **S3SecretAccesKey:** AWS Secret Access Key for accessing the S3 bucket. Please replace `<your-access-key>` with your actual Secret Access Key.
 
 ## Routes
 - **User Routes:**
