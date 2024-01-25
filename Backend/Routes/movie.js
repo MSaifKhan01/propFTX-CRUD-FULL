@@ -30,6 +30,19 @@ movieRouter.get('/',auth,  async (req,res)=>{
 })
 
 
+movieRouter.get('/:id',auth,  async (req,res)=>{
+const {id}=req.params
+    try{
+        
+            const movie=await movieModel.findOne({_id:id})
+            res.status(200).send(movie)
+       
+    }catch(err){
+        res.status(400).send({"msz":err.message})
+    }
+})
+
+
 
 movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
   console.log("UserID here  : ",req.body.userID)
@@ -80,25 +93,14 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
           console.log("from post userID : ",userId)
   
           const currentTime = new Date();
-          const options = {
-            hour12: false,
-            day: "numeric",
-            month: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          };
-  
-          const formattedTime = currentTime.toLocaleString("en-IN", options);
-          console.log("3")
+          const releaseYear = currentTime.getFullYear();
   
           const dataForDB = new movieModel({
             image: imageUrlS3,
             title,
             actors,
             rating,
-            releaseYear: formattedTime,
+            releaseYear,
             userID: userId,
           });
   

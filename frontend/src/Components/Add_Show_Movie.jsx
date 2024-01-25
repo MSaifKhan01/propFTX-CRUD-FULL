@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-
+import { Link } from "react-router-dom";
 import "../CSS/Movie.css";
 
-const FileUpload = () => {
+const MovieManagement = () => {
   const [userID, setUserID] = useState(localStorage.getItem("userID"));
-  const [fileList, setFileList] = useState([]);
+  const [movieList, setmovieList] = useState([]);
   const [fileInput, setFileInput] = useState(null);
-
- 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    formData.append("user", userID);
-   
-  
-    // let BaseUrl=`http://localhost:3001`
+    formData.append("userID", userID);
 
-    // this is latest Deploye Link which is below
-    let BaseUrl = `https://filedrive-management.onrender.com`;
-
+    let BaseUrl = `http://localhost:5030`; 
 
     try {
-      console.log("fgc",formData)
-      const response = await fetch(`${BaseUrl}/file/upload`, {
+      const response = await fetch(`${BaseUrl}/movie/add-movie`, {
         method: "POST",
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -33,258 +25,157 @@ const FileUpload = () => {
         body: formData,
       });
 
-      // Checking if the response status is OK (200)
       if (response.ok) {
-        const responseText = await response.text();
+        // const responseText = await response.text();
+        const { Msz } = await response.json()
+        // console.log("fgubuj",responseText.Msz)
 
-        if (responseText === "File uploaded successfully!") {
-          // Updating the file list after a successful upload
-          console.log("file Uploaded");
-          // Swal.fire(responseText)
-          console.log(response);
-
+        if (Msz === "A New Movie has been added") {
           Swal.fire({
-            title: responseText,
-
+            title: Msz,
             icon: "success",
           });
-          updateFileList();
+          GetingMovieList();
         }
       } else {
-        
         Swal.fire({
           title: "Something went wrong",
           icon: "error",
         });
-        console.error("Error uploading file. Status:", response.status);
+        console.error("Error uploading movie. Status:", response.status);
       }
     } catch (error) {
-      // Handle fetch errors
       Swal.fire({
         title: "Something went wrong",
         icon: "error",
       });
-      console.error("Error uploading file:", error);
+      console.error("Error uploading movie:", error);
     }
   };
 
-  const handleDelete = async (filename) => {
-    console.log("hgdhh1", filename);
-    console.log(encodeURIComponent(filename));
-    // filename=filename.toString()
-    // console.log(filename)
+  const DeleteMovie = async (id) => {
     try {
-      
-      
-     
-      // let BaseUrl=`http://localhost:3001`
-
-      // this is latest Deploye Link which is below
-      let BaseUrl = `https://filedrive-management.onrender.com`;
-      const response = await fetch(
-        `${BaseUrl}/file/delete/${encodeURIComponent(filename)}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      let BaseUrl = `http://localhost:5030`; // Update with your backend URL
+      const response = await fetch(`${BaseUrl}/movie/delete-movie/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
-        // Updating the file list after a successful delete
-
-        updateFileList();
+        GetingMovieList();
+        Swal.fire({
+          title: "Movie deleted successfully",
+          icon: "success",
+        });
       } else {
-       
-        console.error("Error deleting file. Status:", response.status);
+        console.error("Error deleting movie. Status:", response.status);
       }
     } catch (error) {
-      // Handle fetch errors
-      console.error("Error deleting file:", error);
+      console.error("Error deleting movie:", error);
     }
   };
 
+  const handleUpdate = async (id) => {
+  
+};
 
-  const handleUpdate = async (filename) => {
+
+  const GetingMovieList = async () => {
     try {
-     
-      // let BaseUrl=`http://localhost:3001`
-  
-      // this is latest Deploye Link which is below
-      let BaseUrl = `https://filedrive-management.onrender.com`;
-  
-      // Open a modal or a form for updating a file
-      Swal.fire({
-        title: 'Update File',
-        html: `<input type="file" id="updateFileInput" name="file">`,
-        showCancelButton: true,
-        confirmButtonText: 'Update',
-        preConfirm: async () => {
-          const updatedFileInput = document.getElementById('updateFileInput');
-          const updatedFile = updatedFileInput.files[0];
-  
-          if (updatedFile) {
-            const formData = new FormData();
-            formData.append('file', updatedFile);
-            formData.append('user', userID);
-  
-            try {
-              const response = await fetch(`${BaseUrl}/file/update/${encodeURIComponent(filename)}`, {
-                method: 'PUT',
-                headers: {
-                  Authorization: localStorage.getItem('token'),
-                },
-                body: formData,
-              });
-  
-              if (response.ok) {
-                const responseText = await response.text();
-                if (responseText === 'File updated successfully!') {
-                  Swal.fire({
-                    title: responseText,
-                    icon: 'success',
-                  });
-                  updateFileList();
-                }
-              } else {
-                Swal.fire({
-                  title: 'Something went wrong',
-                  icon: 'error',
-                });
-                console.error('Error updating file. Status:', response.status);
-              }
-            } catch (error) {
-              Swal.fire({
-                title: 'Something went wrong',
-                icon: 'error',
-              });
-              console.error('Error updating file:', error);
-            }
-          } else {
-            Swal.fire({
-              title: 'Please select a file for updating',
-              icon: 'warning',
-            });
-          }
-        },
-      });
-    } catch (error) {
-      // Handle errors
-      console.error("Error updating file:", error);
-    }
-  };
-  
-
-  const updateFileList = async () => {
-    try {
-     
-      // let BaseUrl=`http://localhost:3001`
-
-      // this is latest Deploye Link which is below
-      let BaseUrl = `https://filedrive-management.onrender.com`;
-      // Using the appropriate API endpoint based on user role
-      const apiEndpoint =
-        userRole === "admin"
-          ? `${BaseUrl}/file/files`
-          : `${BaseUrl}/file/files/${userID}`;
-
-      const response = await fetch(apiEndpoint, {
+      let BaseUrl = `http://localhost:5030`; 
+      const response = await fetch(`${BaseUrl}/movie`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("token"),
         },
       });
 
-      const files = await response.json();
+      const movies = await response.json();
+      console.log(movies)
 
-      if (Array.isArray(files)) {
-        setFileList(files);
-        console.log("hfhjj", files);
+      if (Array.isArray(movies)) {
+        setmovieList(movies);
       } else {
-        console.error("Invalid response format. Expected an array:", files);
+        console.error("Invalid response format. Expected an array:", movies);
       }
     } catch (error) {
-      console.error("Error fetching files:", error);
+      console.error("Error fetching movies:", error);
     }
   };
 
   useEffect(() => {
     setUserID(localStorage.getItem("userID"));
-    setUserRole(localStorage.getItem("userRole"));
-    updateFileList();
+    GetingMovieList();
   }, []);
+
   return (
     <div>
-      <h2>File Upload</h2>
+      <h2>Movie Management</h2>
       <form id="uploadForm" onSubmit={handleSubmit}>
-        <label htmlFor="fileInput">Choose a file:</label>
-        <input
-          type="file"
-          id="fileInput"
-          name="file"
-          ref={(input) => setFileInput(input)}
-        />
-        <br />
+  <label htmlFor="titleInput">Title:</label>
+  <input type="text" id="titleInput" name="title" required />
+  <br />
+  <br />
+  <label htmlFor="actorsInput">Actors:</label>
+  <input type="text" id="actorsInput" name="actors" required />
+  <br />
+  <br />
+  <label htmlFor="ratingInput">Rating:</label>
+  <input type="number" id="ratingInput" name="rating" min="0" max="10" required />
+  <br />
+  <br />
+  <label htmlFor="fileInput">Choose a movie Image:</label>
+  <input
+    type="file"
+    id="fileInput"
+    name="file"
+    ref={(input) => setFileInput(input)}
+    required
+  />
+  <br />
+  <br />
+  <button type="submit">Upload Movie</button>
+</form>
 
-        <br />
-        <button type="submit">Upload File</button>
-      </form>
 
       <hr />
 
-      <h2>
-        {userRole === "admin"
-          ? "All Files Created by All Users"
-          : "User Files Created By you"}
-      </h2>
+
+
+
+      <h2>Movie List</h2>
       <table>
         <thead>
           <tr>
-            <th>File Image OR Name</th>
-            {userRole === "admin" &&<th>User Information</th>}
+            <th>Title</th>
+            <th>Image</th>
+            <th>Actors</th>
+            <th>Rating</th>
+            <th>Release Year</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {fileList.map((file) => (
-            <tr key={file._id}>
+          {movieList.map((movie) => (
+            <tr key={movie._id}>
+              <td>{movie.title}</td>
               <td>
-                {file.filename.endsWith(".jpg") ||
-                file.filename.endsWith(".png") ? (
-                  <img
-                    src={file.filename}
-                    alt={file.filename}
-                    style={{ maxWidth: "300px", maxHeight: "300px" }}
-                  />
-                ) : (
-                  file.filename
-                )}
-              </td>
-              {userRole === "admin" &&<td>
-                <div>
-                  <p>Name: {file.user ? file.user.name : "Unknown User"}</p>
-                  <p>Role: {file.user ? file.user.role : "Unknown Role"}</p>
-                  <p>
-                    Contact No:{" "}
-                    {file.user ? file.user.mobile_No : "Unknown Contact No"}
-                  </p>
-                  <p>Email: {file.user ? file.user.email : "Unknown Email"}</p>
-                  <p>Upload Date: {file.uploadDate}</p>
-                </div>
-              </td>}
+         
+          <img src={movie.image} alt="Movie Poster" style={{ maxWidth: "100px" }} />
+        </td>
+              <td >{movie.actors}</td>
+              <td>{movie.rating}</td>
+              <td>{movie.releaseYear}</td>
               <td>
-                <button className="downloadBtn">
-                  <div>
-                    <a href={file.filename} download={file.filename}>
-                      Download 
-                    </a>
-                  </div>
-                </button>
-                <button className="deleteBtn" onClick={() => handleDelete(file.filename)}>
+                <button className="deleteBtn" onClick={() => DeleteMovie(movie._id)}>
                   Delete
                 </button>
-                <button className="updateBtn" onClick={() => handleUpdate(file.filename)}>Change File</button>
+                {/* <button className="updateBtn" onClick={() => handleUpdate(movie._id)}>
+                  Update
+                </button> */}
+
+                <button className="updateBtn">
+              <Link to={"/update/" + movie._id}>Update Movie</Link>
+            </button>
               </td>
             </tr>
           ))}
@@ -294,4 +185,4 @@ const FileUpload = () => {
   );
 };
 
-export default FileUpload;
+export default MovieManagement;

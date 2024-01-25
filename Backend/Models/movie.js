@@ -7,7 +7,7 @@ const movieSchema = mongoose.Schema({
     title: String,
 
     actors: String,
-    releasYear:Date,
+    releaseYear:String,
     rating:Number,
     userID: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 },
