@@ -20,10 +20,10 @@ movieRouter.get('/',auth,  async (req,res)=>{
     // const token=req.headers.authorization
     // const decoded=jwt.verify(token,"jammi")
     try{
-        if(decoded){
-            const movies=await movieModel.find({"userID":decoded.userID})
+        
+            const movies=await movieModel.find({"userID":req.body.userID}).populate("userID")
             res.status(200).send(movies)
-        }
+       
     }catch(err){
         res.status(400).send({"msz":err.message})
     }
@@ -32,6 +32,9 @@ movieRouter.get('/',auth,  async (req,res)=>{
 
 
 movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
+  console.log("UserID here  : ",req.body.userID)
+
+  console.log("from movie",req.headers)
     try {
       console.log("0")
       const {title,actors,rating} =req.body;
@@ -42,10 +45,18 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
       if(!file){
         return res.status(400).send({"Msz":"File is required"});
       }
+      
+
+      let moviePresent=await movieModel.findOne({title})
+      console.log("kjbjnj")
+        if(moviePresent){
+            res.status(409).send({"msg": "movie Already Exists"});
+
+        }
   
       const fileContent = fs.readFileSync(file.path);
 
-      
+     
   
       const params={
         Bucket:bucketName,
@@ -103,25 +114,26 @@ movieRouter.post("/add-movie",upload.single("file"),auth, async(req, res) => {
   });
   
 
-movieRouter.put("/update-movie/:Id", async (req, res) => {
+movieRouter.put("/update-movie/:Id",auth, async (req, res) => {
     let { Id } = req.params
 
     let newbody = req.body
 
     try {
-        await movieModel.findByIdAndUpdate({ _id: Id }, newbody)
-        res.send({ "msg": " Movie dataupdated succesfully" })
+        let updatedMovie= await movieModel.findByIdAndUpdate({ _id: Id }, newbody,)
+        
+        res.send({ "msg": " Movie dataupdated succesfully","data": updatedMovie })
     } catch (error) {
         res.send({ "error": "some error occured while updating" })
-        console.log(error)
+       
     }
 })
 
 movieRouter.delete("/delete-movie/:Id", async (req, res) => {
     let  {Id } = req.params
     try {
-        await movieModel.findByIdAndDelete({ _id: Id })
-        res.send({ "message": "Deleted succesfully" })
+       let DeletedData= await movieModel.findByIdAndDelete({ _id: Id })
+        res.send({ "message": "Deleted succesfully",DeletedData })
     } catch (error) {
         res.send({ "error": "some error occured while deleting" })
     }
@@ -130,9 +142,7 @@ movieRouter.delete("/delete-movie/:Id", async (req, res) => {
 
 
 
-movieRouter.patch("/update",async(req,res)=>{
 
-})
 module.exports={
     movieRouter
 }

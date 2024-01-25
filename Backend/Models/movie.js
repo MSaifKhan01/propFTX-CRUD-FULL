@@ -9,7 +9,7 @@ const movieSchema = mongoose.Schema({
     actors: String,
     releasYear:Date,
     rating:Number,
-    userID: String
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 },
     {
         versionKey: false
